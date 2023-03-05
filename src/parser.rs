@@ -133,7 +133,7 @@ impl Parser {
                     }
                 }
                 _ => {
-                    // Split calls by parentheses
+                    // Split calls by parenthesis
                     let mut calls = line.split("(");
 
                     match calls.next() {
