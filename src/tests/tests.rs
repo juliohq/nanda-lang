@@ -1,16 +1,20 @@
 #[cfg(test)]
 mod tests {
-    use std::{io, process::Command};
+    use std::process::Command;
 
     fn binary() -> Command {
-        Command::new("target/release/squid")
+        if cfg!(debug_assertions) {
+            Command::new("target/debug/nanda")
+        } else {
+            Command::new("target/release/nanda")
+        }
     }
 
     #[test]
     fn hello() {
         // Run code
         let output = binary()
-            .arg("src/tests/hello.sq")
+            .arg("src/tests/hello.nd")
             .output()
             .expect("Failed test");
 

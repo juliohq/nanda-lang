@@ -7,6 +7,7 @@ use std::path::Path;
 use crate::Parser;
 
 impl Source {
+    #[inline]
     pub fn interpret<P>(path: P)
     where
         P: AsRef<Path> + Display,
