@@ -16,7 +16,7 @@ impl Parser {
 
         let binding: String = source
             .chars()
-            .map(|char| {
+            .map_while(|char| {
                 if char == '\n' {
                     // Increase replace line counter
                     replace_line += 1;
@@ -26,18 +26,20 @@ impl Parser {
                     // Close string
                     if char == '\'' || char == '\"' {
                         if string_enclosing.unwrap() != char {
+                            // Set enclosing flag and terminate `map` as soon as possible
                             enclosing_error = true;
                             println!(
                                 "String enclosed with unexpected character. (line {})",
                                 replace_line
                             );
+                            return None;
                         }
 
                         is_string = false;
                     }
 
                     // Just return the character
-                    char
+                    Some(char)
                 } else {
                     // Open string
                     if char == '\'' || char == '\"' {
@@ -46,19 +48,19 @@ impl Parser {
                         last_string = replace_line;
                     }
 
-                    char
+                    Some(char)
                 }
             })
             .collect();
 
-        // Make sure all strings were closed
-        if is_string {
-            println!("String not enclosed. (line {})", last_string);
+        // Terminate program due to string enclosing error
+        if enclosing_error {
             return;
         }
 
-        // Terminate program due to string enclosing error
-        if enclosing_error {
+        // Make sure all strings were closed
+        if is_string {
+            println!("String not enclosed. (line {})", last_string);
             return;
         }
 
