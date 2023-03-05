@@ -6,8 +6,10 @@ pub struct Parser;
 impl Parser {
     #[inline]
     pub fn run(source: String) {
-        // Split source code by line endings and filter empty lines
-        let lines = source.split("\n");
+        // Split source code by line endings and filter single comment lines
+        let lines = source
+            .split("\n")
+            .map(|line| if line.starts_with("//") { "\n" } else { line });
 
         // Variable pool
         let mut string_pool: HashMap<&str, &str> = HashMap::new();
