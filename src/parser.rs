@@ -14,6 +14,7 @@ impl Parser {
         let mut last_string: usize = 0; // Line of the last open string
         let mut enclosing_error = false; // Whether an unexpected enclosing character was used
 
+        // `map_while` is used here so it terminates the mapping immediately after an unexpected character error is raised
         let binding: String = source
             .chars()
             .map_while(|char| {
