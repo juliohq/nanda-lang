@@ -1,12 +1,21 @@
 #[cfg(test)]
 mod tests {
+    use std::path::Path;
     use std::process::Command;
 
     fn binary() -> Command {
         if cfg!(debug_assertions) {
-            Command::new("target/debug/nanda")
+            if Path::new("target/debug/nanda").exists() {
+                Command::new("target/debug/nanda")
+            } else {
+                panic!("You have to `cargo build` first!!!");
+            }
         } else {
-            Command::new("target/release/nanda")
+            if Path::new("target/release/nanda").exists() {
+                Command::new("target/release/nanda")
+            } else {
+                panic!("You have to `cargo build --release` first!!!");
+            }
         }
     }
 
