@@ -9,8 +9,10 @@ impl Parser {
         // Static source code analysis
         // Replace parenthesis
         let mut is_string = false; // Whether there's an open string
+        let mut string_enclosing: Option<char> = None;
         let mut replace_line: usize = 1;
         let mut last_string: usize = 0; // Line of the last open string
+        let mut enclosing_error = false; // Whether an unexpected enclosing character was used
 
         let binding: String = source
             .chars()
@@ -23,6 +25,14 @@ impl Parser {
                 if is_string {
                     // Close string
                     if char == '\'' || char == '\"' {
+                        if string_enclosing.unwrap() != char {
+                            enclosing_error = true;
+                            println!(
+                                "String enclosed with unexpected character. (line {})",
+                                replace_line
+                            );
+                        }
+
                         is_string = false;
                     }
 
@@ -31,8 +41,9 @@ impl Parser {
                 } else {
                     // Open string
                     if char == '\'' || char == '\"' {
-                        last_string = replace_line;
                         is_string = true;
+                        string_enclosing = if char == '\'' { Some('\'') } else { Some('\"') };
+                        last_string = replace_line;
                     }
 
                     char
@@ -43,6 +54,11 @@ impl Parser {
         // Make sure all strings were closed
         if is_string {
             println!("String not enclosed. (line {})", last_string);
+            return;
+        }
+
+        // Terminate program due to string enclosing error
+        if enclosing_error {
             return;
         }
 
