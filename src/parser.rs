@@ -1,11 +1,11 @@
-use std::collections::HashMap;
+use std::{collections::HashMap, path::PathBuf};
 
 /// A representation of the Nanda parser.
 pub struct Parser;
 
 impl Parser {
     #[inline]
-    pub fn run(source: String) {
+    pub fn run(source: String, path: PathBuf) {
         // Static source code analysis
         // Replace parenthesis
         let mut is_string = false; // Whether there's an open string
@@ -82,6 +82,26 @@ impl Parser {
             let mut parts = line.split_whitespace();
 
             match parts.next() {
+                Some("use") => {
+                    match parts.next() {
+                        Some(name) => {
+                            // Include the module in the current execution
+                            let module_path = path.with_file_name(format!("{}.nd", name));
+
+                            if module_path.is_file() {
+                                // TODO: Add module support
+                            } else {
+                                println!("Module `{}` not found (line {})", name, counter);
+                                println!("{:?}", module_path);
+                                break;
+                            }
+                        }
+                        _ => {
+                            println!("Missing module name (line {})", counter);
+                            break;
+                        }
+                    }
+                }
                 Some("let") => {
                     match parts.next() {
                         // Check if data is missing previously
