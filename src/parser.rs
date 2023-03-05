@@ -43,6 +43,7 @@ impl Parser {
         // Make sure all strings were closed
         if is_string {
             println!("String not enclosed. (line {})", last_string);
+            return;
         }
 
         // Split source code by line endings and filter single comment lines
