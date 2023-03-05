@@ -18,7 +18,7 @@ impl Source {
                 Parser::run(source);
             }
             Err(e) => {
-                println!("Error reading {} file. ({})", path, e);
+                println!("Error reading `{}` file. ({})", path, e);
             }
         }
     }
