@@ -54,7 +54,7 @@ impl Parser {
         let mut string_pool: HashMap<&str, &str> = HashMap::new();
 
         // Line counter
-        let mut counter = 1u64;
+        let mut counter = 1usize;
 
         // Run source code
         for line in lines {
