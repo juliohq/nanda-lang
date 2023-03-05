@@ -81,17 +81,36 @@ impl Parser {
                         Some("\n") | Some(" ") | Some("") => {}
                         // Print-like statement
                         Some("push") => match calls.next() {
-                            Some(text) => match text.split("\"").skip(1).next() {
-                                Some(arg) => {
-                                    println!("{}", arg.split(")").next().unwrap());
+                            // Split arguments
+                            Some(text) => {
+                                if text.contains("\'") {
+                                    // TODO: Unify argument parsing
+                                    match text.split("\'").skip(1).next() {
+                                        Some(arg) => {
+                                            println!("{}", arg.split(")").next().unwrap());
+                                        }
+                                        None => {
+                                            println!(
+                                                "Missing `text` parameter in function `push`. (line {})",
+                                                counter
+                                            );
+                                        }
+                                    }
+                                } else if text.contains("\"") {
+                                    // TODO: Unify argument parsing
+                                    match text.split("\"").skip(1).next() {
+                                        Some(arg) => {
+                                            println!("{}", arg.split(")").next().unwrap());
+                                        }
+                                        None => {
+                                            println!(
+                                                "Missing `text` parameter in function `push`. (line {})",
+                                                counter
+                                            );
+                                        }
+                                    }
                                 }
-                                None => {
-                                    println!(
-                                        "Missing `text` parameter in function `push`. (line {})",
-                                        counter
-                                    );
-                                }
-                            },
+                            }
                             None => {
                                 println!(
                                     "Missing `text` parameter in function `push`. (line {})",
